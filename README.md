@@ -400,4 +400,4 @@ For a permanent deployment, use a production hosting environment, a production W
 
 ## Contributors
 
-- Harsha Nandan Vedantham
+- [Harsha Nandan Vedantham](https://github.com/harshanandanvedantham) (@harshanandanvedantham)
