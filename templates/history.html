@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application History | LOANWISE</title>
+    <link rel="stylesheet"href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            background: #0b1020;
+            color: #f1f5f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 45px auto;
+            padding: 25px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+        }
+
+        .action-btn {
+            background: #526df5;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .table-card {
+            background: #151d32;
+            border: 1px solid #26334d;
+            border-radius: 14px;
+            padding: 22px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th, td {
+            padding: 17px 14px;
+            text-align: left;
+            border-bottom: 1px solid #29354b;
+        }
+
+        th {
+            color: #94a3b8;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .approved {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+
+        .rejected {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 55px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state h2 {
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #9db0ff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .page-container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <a href="{{ url_for('dashboard') }}" class="back-link">
+        ← Back to Dashboard
+    </a>
+
+    <div class="page-header">
+        <div>
+            <h1>Application History</h1>
+            <p class="subtitle">
+                Track all your previous loan predictions.
+            </p>
+        </div>
+
+        <a href="{{ url_for('new_application') }}" class="action-btn">
+            + New Application
+        </a>
+    </div>
+
+    <div class="table-card">
+
+        {% if applications %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Date</th>
+                    <th>Loan Amount</th>
+                    <th>CIBIL Score</th>
+                    <th>Status</th>
+                    <th>Predicted Probability</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td>#{{ application.application_id }}</td>
+
+                    <td>
+                        {% if application.created_at %}
+                            {{ application.created_at.strftime('%d %b %Y') }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        ₹{{ "{:,.0f}".format(application.loan_amount|float) }}
+                    </td>
+
+                    <td>{{ application.cibil_score }}</td>
+
+                    <td>
+                        {% if application.predicted_status|lower == 'approved' %}
+                            <span class="status approved">Approved</span>
+                        {% else %}
+                            <span class="status rejected">Rejected</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{ "%.2f"|format(application.predicted_probability|float) }}%
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+
+        <div class="empty-state">
+            <h2>No Applications Yet</h2>
+            <p>You haven't submitted any loan applications.</p>
+            <br>
+            <a href="{{ url_for('new_application') }}" class="action-btn">
+                Submit Your First Application
+            </a>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

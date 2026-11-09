@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result | LOANWISE</title>
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <div class="brand">
+        <h1>LOAN<span>WISE</span></h1>
+        <p>SMARTER LOAN ASSESSMENT</p>
+    </div>
+
+    <div class="auth-card" style="width:min(700px,92vw);">
+
+        <div class="auth-heading">
+            <h2>Assessment Complete</h2>
+            <p>Your machine learning assessment is ready.</p>
+        </div>
+
+        <!-- PREDICTION -->
+
+        <div style="text-align:center; padding:25px 0;">
+
+            <p style="color:#8998af;">PREDICTED STATUS</p>
+
+            <h1 style="
+                font-size:36px;
+                margin:15px 0;
+                color:{{ '#22c55e' if status == 'Approved' else '#ef4444' }};
+            ">
+                {{ status | upper }}
+            </h1>
+
+            <p style="color:#8998af;">
+                Model-predicted probability for this outcome
+            </p>
+
+            <h2 style="font-size:30px; margin-top:10px;">
+                {{ probability }}%
+            </h2>
+
+            <p style="color:#8998af; margin-top:15px;">
+                Application ID: #{{ application_id }}
+            </p>
+
+        </div>
+
+        <hr style="border:0; border-top:1px solid #263449;">
+
+        <!-- SHAP EXPLANATION -->
+
+        <section style="margin-top:25px;">
+
+            <h2>Why did the model make this prediction?</h2>
+
+            <p style="color:#8998af; font-size:13px; margin:8px 0 20px;">
+                SHAP identifies which features contributed towards
+                or against the predicted class.
+            </p>
+
+            <h3 style="color:#22c55e; margin-bottom:12px;">
+                Factors supporting {{ status }}
+            </h3>
+
+            {% for item in explanation.shap.positive_factors %}
+                <div style="
+                    background:#142b27;
+                    border:1px solid #245343;
+                    border-radius:10px;
+                    padding:14px;
+                    margin-bottom:10px;
+                ">
+                    <strong>{{ item.feature }}</strong>
+
+                    <p style="color:#a7b7c9; font-size:13px; margin-top:6px;">
+                        SHAP contribution: {{ "%.5f"|format(item.impact) }}
+                    </p>
+                </div>
+            {% else %}
+                <p style="color:#8998af;">No positive contributions identified.</p>
+            {% endfor %}
+
+            <h3 style="color:#ef7777; margin:24px 0 12px;">
+                Factors opposing {{ status }}
+            </h3>
+
+            {% for item in explanation.shap.negative_factors %}
+                <div style="
+                    background:#301d23;
+                    border:1px solid #63323b;
+                    border-radius:10px;
+                    padding:14px;
+                    margin-bottom:10px;
+                ">
+                    <strong>{{ item.feature }}</strong>
+
+                    <p style="color:#a7b7c9; font-size:13px; margin-top:6px;">
+                        SHAP contribution: {{ "%.5f"|format(item.impact) }}
+                    </p>
+                </div>
+            {% else %}
+                <p style="color:#8998af;">No negative contributions identified.</p>
+            {% endfor %}
+
+        </section>
+
+        <hr style="border:0; border-top:1px solid #263449; margin-top:25px;">
+
+        <!-- RULE-BASED EXPLANATION -->
+
+        <section style="margin-top:25px;">
+
+            <h2>Financial observations</h2>
+
+            <p style="color:#8998af; font-size:13px; margin:8px 0 20px;">
+                These are illustrative rule-based observations,
+                separate from the machine learning explanation.
+            </p>
+
+            <h3 style="color:#22c55e; margin-bottom:12px;">
+                Favourable indicators
+            </h3>
+
+            {% for reason in explanation.rules.positive_reasons %}
+                <p style="
+                    padding:10px 12px;
+                    margin-bottom:8px;
+                    border-left:3px solid #22c55e;
+                    background:#142b27;
+                    color:#cbd5e1;
+                ">
+                    {{ reason }}
+                </p>
+            {% else %}
+                <p style="color:#8998af;">No favourable indicators identified.</p>
+            {% endfor %}
+
+            <h3 style="color:#ef7777; margin:22px 0 12px;">
+                Potential concerns
+            </h3>
+
+            {% for reason in explanation.rules.negative_reasons %}
+                <p style="
+                    padding:10px 12px;
+                    margin-bottom:8px;
+                    border-left:3px solid #ef7777;
+                    background:#301d23;
+                    color:#cbd5e1;
+                ">
+                    {{ reason }}
+                </p>
+            {% else %}
+                <p style="color:#8998af;">No potential concerns identified.</p>
+            {% endfor %}
+
+        </section>
+
+        <p style="
+            color:#8998af;
+            font-size:12px;
+            line-height:1.7;
+            margin:25px 0;
+            text-align:center;
+        ">
+            SHAP contributions describe the model's output, not causation
+            or percentages. Rule-based observations are illustrative
+            and are not official lender criteria. This assessment is
+            educational and is not an actual loan approval.
+        </p>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="primary-btn"
+           style="
+               display:block;
+               text-align:center;
+               text-decoration:none;
+           ">
+            BACK TO DASHBOARD
+        </a>
+
+        <a href="{{ url_for('new_application') }}"
+           style="
+               display:block;
+               text-align:center;
+               margin-top:18px;
+           ">
+            START ANOTHER APPLICATION
+        </a>
+
+    </div>
+</div>
+
+</body>
+</html>

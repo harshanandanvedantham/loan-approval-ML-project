@@ -1,0 +1,27 @@
+{
+    "model_name": "Decision Tree",
+    "accuracy": 0.9797,
+    "precision_approved": 0.9884,
+    "recall_approved": 0.9789,
+    "f1_approved": 0.9836,
+    "roc_auc": 0.9799,
+    "training_samples": 3342,
+    "testing_samples": 836,
+    "features": [
+        "no_of_dependents",
+        "education",
+        "self_employed",
+        "income_annum",
+        "loan_amount",
+        "loan_term",
+        "cibil_score",
+        "residential_assets_value",
+        "commercial_assets_value",
+        "luxury_assets_value",
+        "bank_asset_value"
+    ],
+    "classes": [
+        "approved",
+        "rejected"
+    ]
+}

@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | LOANWISE</title>
+
+    <link rel="stylesheet"href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            LOAN<span>WISE</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="active">
+                <span>▦</span> Dashboard
+            </a>
+
+            <a href="{{ url_for('new_application') }}">
+                <span>＋</span> New Application
+            </a>
+
+            <a href="{{ url_for('application_history') }}">
+                <span>▤</span> Application History
+            </a>
+
+            <a href="{{ url_for('my_profile') }}">
+                <span>◎</span> My Profile
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('logout') }}">
+                ↪ Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Your loan assessment overview.</p>
+            </div>
+
+            <div class="user-info">
+                <div class="user-avatar">
+                    {{ user_name[0] | upper }}
+                </div>
+
+                <span>{{ user_name }}</span>
+            </div>
+
+        </header>
+
+
+        <!-- WELCOME SECTION -->
+
+        <section class="welcome-banner">
+
+            <div>
+                <p>WELCOME BACK</p>
+                <h2>Hello, {{ user_name }} 👋</h2>
+                <span>
+                    Manage your loan assessments from one place.
+                </span>
+            </div>
+
+            <div class="welcome-icon">
+                LOANWISE
+            </div>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <p>Total Applications</p>
+                <h2>{{ stats.total_applications }}</h2>
+                <span>All submitted applications</span>
+            </div>
+
+            <div class="stat-card approved-card">
+                <p>Approved</p>
+                <h2>{{ stats.approved_applications }}</h2>
+                <span>Predicted approvals</span>
+            </div>
+
+            <div class="stat-card rejected-card">
+                <p>Rejected</p>
+                <h2>{{ stats.rejected_applications }}</h2>
+                <span>Predicted rejections</span>
+            </div>
+
+        </section>
+
+
+        <!-- RECENT APPLICATIONS -->
+
+        <section class="recent-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Recent Applications</h2>
+                    <p>Your latest loan assessments.</p>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="applications-table">
+
+                    <thead>
+                        <tr>
+                            <th>Application ID</th>
+                            <th>Status</th>
+                            <th>Probability</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for application in recent_applications %}
+
+                        <tr>
+                            <td>#{{ application.application_id }}</td>
+
+                            <td>
+                                <span class="status-badge
+                                {{ application.predicted_status | lower }}">
+                                    {{ application.predicted_status }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ application.predicted_probability }}%
+                            </td>
+
+                            <td>
+                                {{ application.created_at.strftime('%d %b %Y') }}
+                            </td>
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                No applications yet. Your first assessment
+                                will appear here.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- NEW APPLICATION -->
+
+        <section class="new-application-banner">
+
+            <div>
+                <h2>Ready to assess a loan?</h2>
+                <p>Start a new application and get an AI-powered prediction.</p>
+            </div>
+
+            <a href="{{ url_for('new_application') }}" class="primary-btn">
+                NEW APPLICATION →
+            </a>
+
+        </section>
+
+        <footer class="dashboard-footer">
+            © 2026 LOANWISE | Educational Loan Assessment Platform
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>
