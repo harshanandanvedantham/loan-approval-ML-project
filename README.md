@@ -23,6 +23,7 @@ LOANWISE is an educational web application that predicts whether a loan applicat
 - [Public Demo with Cloudflare Tunnel](#public-demo-with-cloudflare-tunnel)
 - [Limitations](#limitations)
 - [Project Information](#project-information)
+- [Contributors](#contributors)
 
 ## Features
 
@@ -396,3 +397,7 @@ For a permanent deployment, use a production hosting environment, a production W
 | **Web framework** | Flask |
 | **Database** | MySQL |
 | **ML tools** | Python, pandas, scikit-learn, SHAP |
+
+## Contributors
+
+- Harsha Nandan Vedantham
